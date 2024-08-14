@@ -486,22 +486,17 @@ export function useMenuAnchorRef(
   const [editor] = useLexicalComposerContext();
   const anchorElementRef = useRef<HTMLElement>(document.createElement('div'));
   const positionMenu = useCallback(() => {
-    anchorElementRef.current.style.top = anchorElementRef.current.style.bottom;
     const rootElement = editor.getRootElement();
     const containerDiv = anchorElementRef.current;
 
-    const menuEle = containerDiv.firstChild as HTMLElement;
+    const menuEle = containerDiv.firstChild as Element;
     if (rootElement !== null && resolution !== null) {
       const {left, top, width, height} = resolution.getRect();
-      const anchorHeight = anchorElementRef.current.offsetHeight; // use to position under anchor
-      containerDiv.style.top = `${
-        top + window.pageYOffset + anchorHeight + 3
-      }px`;
+      containerDiv.style.top = `${top + window.pageYOffset}px`;
       containerDiv.style.left = `${left + window.pageXOffset}px`;
       containerDiv.style.height = `${height}px`;
       containerDiv.style.width = `${width}px`;
       if (menuEle !== null) {
-        menuEle.style.top = `${top}`;
         const menuRect = menuEle.getBoundingClientRect();
         const menuHeight = menuRect.height;
         const menuWidth = menuRect.width;
@@ -513,13 +508,14 @@ export function useMenuAnchorRef(
             rootElementRect.right - menuWidth + window.pageXOffset
           }px`;
         }
+        const margin = 10;
         if (
           (top + menuHeight > window.innerHeight ||
             top + menuHeight > rootElementRect.bottom) &&
           top - rootElementRect.top > menuHeight + height
         ) {
           containerDiv.style.top = `${
-            top - menuHeight + window.pageYOffset - height
+            top - menuHeight + window.pageYOffset - (height + margin)
           }px`;
         }
       }
