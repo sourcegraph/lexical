@@ -28,11 +28,11 @@ import {
   ReactPortal,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
-import useLayoutEffect from 'shared/useLayoutEffect';
 
 export type MenuTextMatch = {
   leadOffset: number;
