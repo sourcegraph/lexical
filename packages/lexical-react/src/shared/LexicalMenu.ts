@@ -214,13 +214,23 @@ export function useDynamicPositioning(
         targetElement,
         rootScrollParent,
       );
-      const handleScroll = function () {
+      const handleScroll = function (event: Event) {
         if (!ticking) {
           window.requestAnimationFrame(function () {
             onReposition();
             ticking = false;
           });
           ticking = true;
+        }
+
+        const scrollTarget = event.target;
+        if (scrollTarget !== rootScrollParent) {
+          // Ignore scroll events that aren't scrolling the editor. This makes it so the menu
+          // doesn't move when the user scrolls the page. It will still disappear if the menu is
+          // entirely contained in the editor scroll container and disappears. There is a bug where
+          // it disappears too eagerly in some cases, but this is a rare case because the editor is
+          // rarely so tall to have its own scroll container.
+          return;
         }
         const isInView = isTriggerVisibleInNearestScrollContainer(
           targetElement,
@@ -512,7 +522,10 @@ export function useMenuAnchorRef(
         if (
           (top + menuHeight > window.innerHeight ||
             top + menuHeight > rootElementRect.bottom) &&
-          top - rootElementRect.top > menuHeight + height
+          // Handle the case where the viewport (not just the rootElement) has more room above,
+          // not below. Repro on playground:
+          (top - window.scrollY > menuHeight + height ||
+            top - rootElementRect.top > menuHeight + height)
         ) {
           containerDiv.style.top = `${
             top - menuHeight + window.pageYOffset - (height + margin)
