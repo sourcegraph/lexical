@@ -12,7 +12,7 @@ In this repository, run:
 npm install
 npm run prepare-release
 cd packages/lexical-react/npm
-TARBALL="tar czfv lexical-react-sourcegraph-fork-$(git rev-parse --short HEAD).tgz"
+TARBALL="lexical-react-sourcegraph-fork-$(git rev-parse --short HEAD).tgz"
 tar czfv $TARBALL .
 gsutil cp $TARBALL gs://sourcegraph-assets/npm/
 rm $TARBALL
