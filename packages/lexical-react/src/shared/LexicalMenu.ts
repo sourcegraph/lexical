@@ -506,6 +506,7 @@ export function useMenuAnchorRef(
       containerDiv.style.left = `${left + window.pageXOffset}px`;
       containerDiv.style.height = `${height}px`;
       containerDiv.style.width = `${width}px`;
+      containerDiv.classList.remove('typeahead-flipped');
       if (menuEle !== null) {
         const menuRect = menuEle.getBoundingClientRect();
         const menuHeight = menuRect.height;
@@ -530,6 +531,7 @@ export function useMenuAnchorRef(
           containerDiv.style.top = `${
             top - menuHeight + window.pageYOffset - (height + margin)
           }px`;
+          containerDiv.classList.add('typeahead-flipped');
         }
       }
 
